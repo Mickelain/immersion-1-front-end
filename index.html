@@ -66,18 +66,21 @@
     var template = Handlebars.compile(source);
     var data;
 
-    data = {"stories": [{"title": "Dummy Title", "author": {"sso": "212411766", "name": "Pei Pang"}, "body": "body", "congrats": 5, "itlp": {"sso": "212447791", "name": "Jun Raymond Ma"}, "approvals": 0}
-                      , {"title": "Dummy Title 2", "author": {"sso": "212447791", "name": "Jun Raymond Ma"}, "body": "body2", "congrats": 19, "itlp": {"sso": "212411766", "name": "Pei Pang"}, "approvals": 1}
-          ]};
-    $('#storyList').append(template(data));
+    // data = {"stories": [{"title": "Dummy Title", "author": {"sso": "212411766", "name": "Pei Pang"}, "body": "body", "congrats": 5, "itlp": {"sso": "212447791", "name": "Jun Raymond Ma"}, "approvals": 0}
+    //                   , {"title": "Dummy Title 2", "author": {"sso": "212447791", "name": "Jun Raymond Ma"}, "body": "body2", "congrats": 19, "itlp": {"sso": "212411766", "name": "Pei Pang"}, "approvals": 1}
+    //       ]};
+    // $('#storyList').append(template(data));
 
     $.ajax({
-      url: 'https://itlp.herokuapp.com/stories'
+      url: 'https://itlp.herokuapp.com/stories/'
     , type: 'GET'
     })
     .done(function(response) {
-      data = response;
-      $('#storyList').append(template(data));
+      response.stories = response.stories.filter(function(story) {
+        return story.approvals >= 5;
+      });
+      $('#storyList').append(template(response));
+      $('#storyList').removeClass('active loader');
     });
 
     if (getUrlParameter('isApprover')) {
