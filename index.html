@@ -48,8 +48,8 @@
     <a href="" class="item">Link 2</a>
     <a href="" class="item">Link 3</a>
     <a href="" class="item">Link 4</a>
-    <a id="aWriteStory" href="writeStory.html" class="hide item right">Write Story</a>
-    <a id="aApproveStory" href="approveStories.html" class="hide item right">Approve Stories</a>
+    <a id="aWriteStory" href="writeStory.html?isAuthor=1" class="hide item right">Write Story</a>
+    <a id="aApproveStory" href="approveStories.html?isApprover=1" class="hide item right">Approve Stories</a>
   </div>
 
   <!-- STORY LIST -->
@@ -65,19 +65,20 @@
     var source = $("#story-template").html();
     var template = Handlebars.compile(source);
     var data;
-    // $.ajax({
-    //   url: 'https://itlp.herokuapp.com/stories'
-    // , type: 'GET'
-    // })
-    // .done(function(response) {
-    //   data = response;
-    //   $('#storyList').append(template(data));
-    // });
 
     data = {"stories": [{"title": "Dummy Title", "author": {"sso": "212411766", "name": "Pei Pang"}, "body": "body", "congrats": 5, "itlp": {"sso": "212447791", "name": "Jun Raymond Ma"}, "approvals": 0}
                       , {"title": "Dummy Title 2", "author": {"sso": "212447791", "name": "Jun Raymond Ma"}, "body": "body2", "congrats": 19, "itlp": {"sso": "212411766", "name": "Pei Pang"}, "approvals": 1}
           ]};
     $('#storyList').append(template(data));
+
+    $.ajax({
+      url: 'https://itlp.herokuapp.com/stories'
+    , type: 'GET'
+    })
+    .done(function(response) {
+      data = response;
+      $('#storyList').append(template(data));
+    });
 
     if (getUrlParameter('isApprover')) {
       $('#aApproveStory').removeClass('hide');
