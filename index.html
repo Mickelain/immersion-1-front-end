@@ -11,6 +11,38 @@
     <script src="utils.js"></script>
 </head>
 <body>
+
+  <!-- TEMPLATES -->
+  <script id="story-template" type="text/x-handlebars-template">
+    {{#each stories}}
+    <div class="item">
+      <div class="content">
+        <a class="header">{{title}}</a>
+        <div class="meta">
+          <a>{{itlp.name}}</a>
+          Nominated by
+          <a>{{author.name}}</a>
+        </div>
+        <div class="description">
+          {{body}}
+        </div>
+        <div class="extra">
+          <div class="ui right floated primary button">
+            Read Full Story
+            <i class="right chevron icon"></i>
+          </div>
+            <div class="ui right floated animated button">
+              <div class="visible content">{{congrats}} <i class="right thumbs up icon"></i></div>
+              <div class="hidden content">Congrats!</div>
+            </div>
+        </div>
+      </div>
+    </div>
+    {{/each}}
+  </script>
+
+  <!-- MENU -->
+
   <div class="ui stackable container menu">
     <a href="" class="item">Link 1</a>
     <a href="" class="item">Link 2</a>
@@ -20,62 +52,33 @@
     <a id="aApproveStory" href="approveStories.html" class="hide item right">Approve Stories</a>
   </div>
 
+  <!-- STORY LIST -->
+
   <h1 class="ui center aligned header">Stories</h1>
   <div class="ui container">
     <div id="storyList" class="ui relaxed divided items">
-
-
-      <script id="story-template" type="text/x-handlebars-template">
-        {{#each stories}}
-        <div class="item">
-          <div class="content">
-            <a class="header">{{title}}</a>
-            <div class="meta">
-              <a>{{itlp.name}}</a>
-              Nominated by
-              <a>{{author.name}}</a>
-            </div>
-            <div class="description">
-              {{body}}
-            </div>
-            <div class="extra">
-              <div class="ui right floated primary button">
-                Read Full Story
-                <i class="right chevron icon"></i>
-              </div>
-                <div class="ui right floated animated button">
-                  <div class="visible content">{{congrats}} <i class="right thumbs up icon"></i></div>
-                  <div class="hidden content">Congrats!</div>
-                </div>
-            </div>
-          </div>
-        </div>
-        {{/each}}
-      </script>
-
     </div>
   </div>
 
-  <script>
-    $('.ui.accordion').accordion();
-  </script>
   <script type="text/javascript">
+    // $('.ui.accordion').accordion();
     var source = $("#story-template").html();
     var template = Handlebars.compile(source);
     var data;
-    // $.ajax({
-    //   url: 'https://itlp.herokuapp.com/stories'
-    // , type: 'GET'
-    // })
-    // .done(function(response) {
-    //   data = response;
-    // });
+    $.ajax({
+      url: 'https://itlp.herokuapp.com/stories'
+    , type: 'GET'
+    })
+    .done(function(response) {
+      data = response;
+      $('#storyList').append(template(data));
+    });
 
-    data = {"stories": [{"title": "Dummy Title", "author": {"sso": "212411766", "name": "Pei Pang"}, "body": "body", "congrats": 5, "itlp": {"sso": "212447791", "name": "Jun Raymond Ma"}, "approvals": 0}
-                      , {"title": "Dummy Title 2", "author": {"sso": "212447791", "name": "Jun Raymond Ma"}, "body": "body2", "congrats": 19, "itlp": {"sso": "212411766", "name": "Pei Pang"}, "approvals": 1}
-          ]};
+    // data = {"stories": [{"title": "Dummy Title", "author": {"sso": "212411766", "name": "Pei Pang"}, "body": "body", "congrats": 5, "itlp": {"sso": "212447791", "name": "Jun Raymond Ma"}, "approvals": 0}
+    //                   , {"title": "Dummy Title 2", "author": {"sso": "212447791", "name": "Jun Raymond Ma"}, "body": "body2", "congrats": 19, "itlp": {"sso": "212411766", "name": "Pei Pang"}, "approvals": 1}
+    //       ]};
     // var html = template(data);
-    $('#storyList').append(template(data));
+    // $('#storyList').append(template(data));
 
     if (getUrlParameter('isApprover')) {
       $('#aApproveStory').removeClass('hide');
