@@ -31,7 +31,7 @@
             Read Full Story
             <i class="right chevron icon"></i>
           </div>
-            <div class="ui right floated animated button">
+            <div class="ui right floated animated button approveBtn" data-storyid="{{id}}">
               <div class="visible content">{{approvals}}/5 <i class="right thumbs up icon"></i></div>
               <div class="hidden content">Approve!</div>
             </div>
@@ -74,12 +74,30 @@
       $('#storyList').removeClass('active loader');
     });
 
-    if (getUrlParameter('isApprover')) {
+    var user = JSON.parse(localStorage.getItem('user'))
+    if (user.isApprover) {
       $('#aApproveStory').removeClass('hide');
     }
-    if (getUrlParameter('isAuthor')) {
+    if (user.isAuthor) {
       $('#aWriteStory').removeClass('hide');
     }
+
+    $('#storyList').on('click', '.approveBtn', function() {
+      var $self = $(this);
+      var myData = {
+          approver: user.sso,
+          story: $self.data('storyid')
+        };
+      console.log(myData);
+      $.ajax({
+        url: 'http://itlp.herokuapp.com/add/approval/',
+        type: 'post',
+        data: myData
+      })
+      .done(function(response){
+        console.log(response);
+      });
+    });
   </script>
 </body>
 </html>

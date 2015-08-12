@@ -80,10 +80,11 @@
       $('#storyList').removeClass('active loader');
     });
 
-    if (getUrlParameter('isApprover')) {
+    var user = JSON.parse(localStorage.getItem('user'))
+    if (user.isApprover) {
       $('#aApproveStory').removeClass('hide');
     }
-    if (getUrlParameter('isAuthor')) {
+    if (user.isAuthor) {
       $('#aWriteStory').removeClass('hide');
     }
   </script>
