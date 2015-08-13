@@ -64,17 +64,19 @@
     //       ]};
     // $('#storyList').append(template(data));
 
-    $.ajax({
-      url: 'https://itlp.herokuapp.com/stories/'
-    , type: 'GET'
-    })
-    .done(function(response) {
-      response.stories = response.stories.filter(function(story) {
-        return story.approvals >= 5;
+    setInterval(function() {
+      $.ajax({
+        url: 'https://itlp.herokuapp.com/stories/'
+      , type: 'GET'
+      })
+      .done(function(response) {
+        response.stories = response.stories.filter(function(story) {
+          return story.approvals >= 5;
+        });
+        $('#storyList').html(template(response));
+        $('#storyList').removeClass('active loader');
       });
-      $('#storyList').append(template(response));
-      $('#storyList').removeClass('active loader');
-    });
+    }, 1000);
 
     var user = JSON.parse(localStorage.getItem('user'))
     if (user.isApprover) {
