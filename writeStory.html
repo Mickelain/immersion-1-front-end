@@ -44,22 +44,29 @@
   </div>
 
   <script type="text/javascript">
+      var user = JSON.parse(localStorage.getItem('user'));
 
     $('#submitStory').click(function() {
+
       $('#storyForm').addClass("loading");
+      var myData =  {
+          author: user.sso,
+          nominee: $('#nominee').val(),
+          title: $('#title').val(),
+          body: $('#body').val()
+        };
+        debugger;
       $.ajax({
         url: 'http://itlp.herokuapp.com/add/story/',
-        type: 'post',
-        data: {
-
-        }
+        type: 'get',
+        data: myData
       })
       .done(function(response){
         $('#storyForm').removeClass("loading");
+        console.log(response);
       });
     });
 
-    var user = JSON.parse(localStorage.getItem('user'))
     if (user.isApprover) {
       $('#aApproveStory').removeClass('hide');
     }
