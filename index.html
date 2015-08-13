@@ -31,7 +31,7 @@
             Read Full Story
             <i class="right chevron icon"></i>
           </div>
-            <div class="ui right floated animated button">
+            <div class="ui right floated animated button congratsBtn" data-storyid="{{id}}">
               <div class="visible content">{{congrats}} <i class="right thumbs up icon"></i></div>
               <div class="hidden content">Congrats!</div>
             </div>
@@ -87,6 +87,23 @@
     if (user.isAuthor) {
       $('#aWriteStory').removeClass('hide');
     }
+
+    $('#storyList').on('click', '.congratsBtn', function() {
+      var $self = $(this);
+      var myData = {
+          user: user.sso,
+          story: $self.data('storyid')
+        };
+      console.log(myData);
+      $.ajax({
+        url: 'http://itlp.herokuapp.com/add/congrat/',
+        type: 'get',
+        data: myData
+      })
+      .done(function(response){
+        console.log(response);
+      });
+    });
   </script>
 </body>
 </html>

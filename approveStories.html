@@ -91,7 +91,7 @@
       console.log(myData);
       $.ajax({
         url: 'http://itlp.herokuapp.com/add/approval/',
-        type: 'post',
+        type: 'get',
         data: myData
       })
       .done(function(response){
